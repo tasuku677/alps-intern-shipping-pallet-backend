@@ -1,14 +1,10 @@
-from typing import Union
-
+import os
 from fastapi import FastAPI, File, Form, UploadFile, status
 from fastapi.responses import JSONResponse
 
-from pydantic import BaseModel
-
-
 from fastapi.middleware.cors import CORSMiddleware
-import os
 
+import json
 
 app = FastAPI()
 
@@ -32,23 +28,45 @@ async def photo_store(
     palletId: str = Form(...),
 ):
 
-    folder_path = "./temp/{palletId}".format(palletId=palletId)
+    year_month = blobArray[0].filename.split("_")[-1][:6]
+    folder_path = "./temp/{year_month}".format(year_month=year_month)
     os.makedirs(folder_path, exist_ok=True)
-    
+    photo_name_list = []
+
     try:
         for _, file in enumerate(blobArray):
             file_path = os.path.join(folder_path, f"{file.filename}.jpg")
-            # Save the image data to a file
             with open(file_path, "wb") as f:
                 f.write(await file.read())
-            print('file', file)
+            photo_name_list.append(file.filename)
+       
+        if(os.path.exists('./info.json')):
+            with open('./info.json', 'r') as json_file:
+                try:
+                    data = json.load(json_file)
+                except json.JSONDecodeError:
+                    data = []   
+        else:
+            data = []
+        json_data = {
+            "palletId": palletId,
+            "employeeId": employeeId,
+            "photos": photo_name_list
+        }                
+        data.append(json_data)   
+        with open('./info.json', "w") as json_file:
+            json.dump(data, json_file, indent=4)
+
         return JSONResponse(status_code=status.HTTP_200_OK, content={
                 "message": "Photos uploaded successfully",
                 "employeeId": employeeId,
                 "palletId": palletId
             })
+            
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={
             "message": "Failed to upload photos",
             "error": str(e)
         })
+
+# def 
