@@ -1,6 +1,7 @@
 FROM python:3.12-slim
 LABEL authors="mkorbel@alps.cz"
 WORKDIR /app
+RUN apt update && apt install -y --no-install-recommends --no-install-suggests unixodbc && apt clean
 COPY requirements.txt /root/requirements.txt
 COPY utils/ /app/utils
 COPY default_config.yaml /app/default_config.yaml
