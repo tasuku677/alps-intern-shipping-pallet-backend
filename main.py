@@ -1,6 +1,6 @@
 import os
 import re
-from fastapi import FastAPI, File, Form, UploadFile, status
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -38,6 +38,7 @@ async def receive_photo(
     isoTimeStampArray: list[str] = Form(...),
     blobArray: list[UploadFile] = File(...),
 ):
+    # Store photos in the folder
     match = re.match(get_config("FOLDER_SEPARATOR"), isoTimeStampArray[0])
     if match:
         folder_name = match.group(0)
@@ -46,25 +47,31 @@ async def receive_photo(
     try:
         photo_name_list = await store_photo(blobArray, folder_path)
         make_backup(employeeId, palletId, photo_name_list, folder_path)
-
-        connection = get_db_connection()
-        for _, isoTimeStamp in enumerate(isoTimeStampArray):
-            print(isoTimeStamp)
-            add_data(connection, palletId, employeeId, isoTimeStamp)
-        close_db_connection(connection)
-
-        return JSONResponse(status_code=status.HTTP_200_OK, content={
-            "message": "Photos uploaded successfully",
-            "employeeId": employeeId,
-            "palletId": palletId
-        })
-
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={
             "message": "Failed to upload photos",
             "error": str(e)
         })
-    # finally:
-    #     connection = get_db_connection()
-    #     add_data(connection, palletId, employeeId, timestamp)
-    #     close_db_connection(connection)
+    # Operate database
+    try:
+        connection = get_db_connection()
+        try:
+            for _, isoTimeStamp in enumerate(isoTimeStampArray):
+                print(isoTimeStamp)
+                add_data(connection, palletId, employeeId, isoTimeStamp)
+        finally:
+            close_db_connection(connection)
+        return JSONResponse(status_code=status.HTTP_200_OK, content={
+            "message": "Photos uploaded successfully",
+            "employeeId": employeeId,
+            "palletId": palletId
+        })
+    except HTTPException as e:
+        return JSONResponse(status_code=e.status_code, content={
+            "message": e.detail
+        })
+    except Exception as e:
+        return JSONResponse(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content={
+            "message": "There is network issue",
+            "error": str(e)
+        })
