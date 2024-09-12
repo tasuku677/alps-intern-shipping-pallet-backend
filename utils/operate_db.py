@@ -1,28 +1,19 @@
 from fastapi import APIRouter, HTTPException
-import pyodbc
-from config.configurable_value import DEFAULT_CONFIG # type: ignore
+import pymssql
+from config.configurable_value import get_config # type: ignore
 
 
 router = APIRouter()
 
-server = DEFAULT_CONFIG['DATABASE_SERVER']
-database = DEFAULT_CONFIG['DATABASE_NAME'] 
-username = DEFAULT_CONFIG['DATABASE_USERNAME']
-password = DEFAULT_CONFIG['DATABASE_PASSWORD']
-driver = "ODBC Driver 18 for SQL Server"
+server = get_config('DATABASE_SERVER')
+database = get_config('DATABASE_NAME')
+username = get_config('DATABASE_USERNAME')
+password = get_config('DATABASE_PASSWORD')
 
-connection_string = (
-    f"DRIVER={{{driver}}};"
-    f"SERVER={server};"
-    f"DATABASE={database};"
-    f"UID={username};"
-    f"PWD={password};"
-    f"TrustServerCertificate=yes;"
-)
 
 def get_db_connection():
     try: 
-        connection = pyodbc.connect(connection_string)
+        connection = pymssql.connect(server, username, password, database)
         return connection
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -34,7 +25,7 @@ def close_db_connection(connection):
         raise HTTPException(status_code=500, detail=str(e))
 
 def get_data(connection):
-    cursor = connection.cursor()
+    cursor = connection.cursor(as_dict=True)
     query = f"""
     SELECT 
         PalletNo, 
