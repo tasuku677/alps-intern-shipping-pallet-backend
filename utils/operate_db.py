@@ -9,7 +9,7 @@ server = get_config('DATABASE_SERVER')
 database = get_config('DATABASE_NAME')
 username = get_config('DATABASE_USERNAME')
 password = get_config('DATABASE_PASSWORD')
-
+TABLE_NAME = get_config('TABLE_NAME')
 
 def get_db_connection():
     try: 
@@ -31,7 +31,7 @@ def get_data(connection):
         PalletNo, 
         CreatedBy, 
         CONVERT(varchar, CreatedOn, 126) AS CreatedOn 
-    FROM {DEFAULT_CONFIG['TABLE_NAME']}
+    FROM {TABLE_NAME}
     """
     cursor.execute(query)
     data = cursor.fetchall()
@@ -40,7 +40,7 @@ def get_data(connection):
 def add_data(connection, employeeId, palletID, timestamp):
     cursor = connection.cursor()
     query = f"""
-    INSERT INTO {DEFAULT_CONFIG['TABLE_NAME']} (PalletNo, CreatedBy, CreatedOn) 
+    INSERT INTO {TABLE_NAME} (PalletNo, CreatedBy, CreatedOn) 
     VALUES (?, ?, CAST(? AS datetimeoffset))
     """
     # cursor.execute(query, (palletID, employeeId, "2024-09-09T11:29:11.65+00:00"))
