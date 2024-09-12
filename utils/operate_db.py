@@ -3,6 +3,7 @@ import pymssql
 from config.configurable_value import get_config # type: ignore
 
 
+import logging
 router = APIRouter()
 
 server = get_config('DATABASE_SERVER')
@@ -10,6 +11,8 @@ database = get_config('DATABASE_NAME')
 username = get_config('DATABASE_USERNAME')
 password = get_config('DATABASE_PASSWORD')
 TABLE_NAME = get_config('TABLE_NAME')
+
+logger = logging.getLogger('db')
 
 def get_db_connection():
     try: 
@@ -43,6 +46,7 @@ def add_data(connection, employeeId, palletID, timestamp):
         INSERT INTO {TABLE_NAME} (PalletNo, CreatedBy, CreatedOn) 
         VALUES ("{palletID}","{employeeId}",CAST("{timestamp}" AS datetimeoffset))
     """
+    logger.info(query)
     # cursor.execute(query, (palletID, employeeId, "2024-09-09T11:29:11.65+00:00"))
     cursor.execute(query)
     connection.commit()
