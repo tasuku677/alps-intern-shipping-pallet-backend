@@ -40,11 +40,11 @@ def get_data(connection):
 def add_data(connection, employeeId, palletID, timestamp):
     cursor = connection.cursor()
     query = f"""
-    INSERT INTO {TABLE_NAME} (PalletNo, CreatedBy, CreatedOn) 
-    VALUES (?, ?, CAST(? AS datetimeoffset))
+        INSERT INTO {TABLE_NAME} (PalletNo, CreatedBy, CreatedOn) 
+        VALUES ("{palletID}","{employeeId}",CAST("{timestamp}" AS datetimeoffset))
     """
     # cursor.execute(query, (palletID, employeeId, "2024-09-09T11:29:11.65+00:00"))
-    cursor.execute(query, (palletID, employeeId, timestamp))
+    cursor.execute(query)
     connection.commit()
     
 if __name__ == "__main__":
