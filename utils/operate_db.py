@@ -19,12 +19,14 @@ def get_db_connection():
         connection = pymssql.connect(server, username, password, database)
         return connection
     except Exception as e:
+        logger.error(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 def close_db_connection(connection):
     try:
         connection.close()
     except Exception as e:
+        logger.error(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 def get_data(connection):
@@ -41,15 +43,13 @@ def get_data(connection):
     return data
 
 def add_data(connection, employeeId, palletID, timestamp):
-    cursor = connection.cursor()
     query = f"""
         INSERT INTO {TABLE_NAME} (PalletNo, CreatedBy, CreatedOn) 
-        VALUES ("{palletID}","{employeeId}",CAST("{timestamp}" AS datetimeoffset))
+        VALUES ('{palletID}','{employeeId}',CAST('{timestamp}' AS datetimeoffset))
     """
     logger.info(query)
     # cursor.execute(query, (palletID, employeeId, "2024-09-09T11:29:11.65+00:00"))
-    cursor.execute(query)
-    connection.commit()
+    connection.execute_non_query(query)
     
 if __name__ == "__main__":
     connection = get_db_connection()
