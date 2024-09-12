@@ -1,60 +1,57 @@
 from fastapi import APIRouter, HTTPException
-import pyodbc
-from config.configurable_value import DEFAULT_CONFIG # type: ignore
+import pymssql
+from config.configurable_value import get_config # type: ignore
 
 
+import logging
 router = APIRouter()
 
-server = DEFAULT_CONFIG['DATABASE_SERVER']
-database = DEFAULT_CONFIG['DATABASE_NAME'] 
-username = DEFAULT_CONFIG['DATABASE_USERNAME']
-password = DEFAULT_CONFIG['DATABASE_PASSWORD']
-driver = "ODBC Driver 18 for SQL Server"
+server = get_config('DATABASE_SERVER')
+database = get_config('DATABASE_NAME')
+username = get_config('DATABASE_USERNAME')
+password = get_config('DATABASE_PASSWORD')
+TABLE_NAME = get_config('TABLE_NAME')
 
-connection_string = (
-    f"DRIVER={{{driver}}};"
-    f"SERVER={server};"
-    f"DATABASE={database};"
-    f"UID={username};"
-    f"PWD={password};"
-    f"TrustServerCertificate=yes;"
-)
+logger = logging.getLogger('db')
 
 def get_db_connection():
     try: 
-        connection = pyodbc.connect(connection_string)
+        connection = pymssql.connect(server, username, password, database)
         return connection
     except Exception as e:
+        logger.error(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 def close_db_connection(connection):
     try:
         connection.close()
     except Exception as e:
+        logger.error(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 def get_data(connection):
-    cursor = connection.cursor()
+    cursor = connection.cursor(as_dict=True)
     query = f"""
     SELECT 
         PalletNo, 
         CreatedBy, 
         CONVERT(varchar, CreatedOn, 126) AS CreatedOn 
-    FROM {DEFAULT_CONFIG['TABLE_NAME']}
+    FROM {TABLE_NAME}
     """
     cursor.execute(query)
     data = cursor.fetchall()
     return data
 
 def add_data(connection, employeeId, palletID, timestamp):
-    cursor = connection.cursor()
     query = f"""
-    INSERT INTO {DEFAULT_CONFIG['TABLE_NAME']} (PalletNo, CreatedBy, CreatedOn) 
-    VALUES (?, ?, CAST(? AS datetimeoffset))
+        INSERT INTO {TABLE_NAME} (PalletNo, CreatedBy, CreatedOn) 
+        VALUES ('{palletID}','{employeeId}',CAST('{timestamp}' AS datetimeoffset))
     """
-    cursor.execute(query, (palletID, employeeId, timestamp))
-    
-    
+    logger.info(query)
+    cursor = connection.cursor()
+    # cursor.execute(query, (palletID, employeeId, "2024-09-09T11:29:11.65+00:00"))
+    cursor.execute(query)
+    connection.commit()    
 if __name__ == "__main__":
     connection = get_db_connection()
     add_data(connection, "Ic980", "ALPS8092", "2024-09-09T11:29:11.65+00:00")
