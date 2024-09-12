@@ -52,9 +52,8 @@ def add_data(connection, employeeId, palletID, timestamp):
     INSERT INTO {DEFAULT_CONFIG['TABLE_NAME']} (PalletNo, CreatedBy, CreatedOn) 
     VALUES (?, ?, CAST(? AS datetimeoffset))
     """
-    # cursor.execute(query, (palletID, employeeId, "2024-09-09T11:29:11.65+00:00"))
     cursor.execute(query, (palletID, employeeId, timestamp))
-    connection.commit()
+    
     
 if __name__ == "__main__":
     connection = get_db_connection()

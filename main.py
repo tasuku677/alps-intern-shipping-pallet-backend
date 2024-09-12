@@ -1,5 +1,7 @@
 import os
 import re
+
+import logging
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +11,9 @@ from utils.make_backup import make_backup
 from config.configurable_value import get_config
 
 from utils.operate_db import get_db_connection, close_db_connection, add_data
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger()
 
 app = FastAPI()
 
@@ -48,6 +53,7 @@ async def receive_photo(
         photo_name_list = await store_photo(blobArray, folder_path)
         make_backup(employeeId, palletId, photo_name_list, folder_path)
     except Exception as e:
+        logger.error(e, exc_info=True)
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={
             "message": "Failed to upload photos",
             "error": str(e)
@@ -61,6 +67,7 @@ async def receive_photo(
                 add_data(connection, palletId, employeeId, isoTimeStamp)
         finally:
             close_db_connection(connection)
+            logger.info(f'Pallet {palletId} has been stored successfully.')
         return JSONResponse(status_code=status.HTTP_200_OK, content={
             "message": "Photos uploaded successfully",
             "employeeId": employeeId,
