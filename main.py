@@ -9,7 +9,7 @@ from utils.make_backup import make_backup
 from config.configurable_value import get_config
 
 from utils.operate_db import get_db_connection, close_db_connection, add_data
- 
+
 app = FastAPI()
 
 app.add_middleware(
@@ -38,9 +38,7 @@ async def receive_photo(
     isoTimeStampArray: list[str] = Form(...),
     blobArray: list[UploadFile] = File(...),
 ):
-    # print(blobArray)  
-    print(isoTimeStampArray[0])
-    match = re.match( get_config("FOLDER_SEPARATOR"), isoTimeStampArray[0])
+    match = re.match(get_config("FOLDER_SEPARATOR"), isoTimeStampArray[0])
     if match:
         folder_name = match.group(0)
     folder_path = f"./photos/{folder_name}"
@@ -48,14 +46,13 @@ async def receive_photo(
     try:
         photo_name_list = await store_photo(blobArray, folder_path)
         make_backup(employeeId, palletId, photo_name_list, folder_path)
-        
-        
+
         connection = get_db_connection()
         for _, isoTimeStamp in enumerate(isoTimeStampArray):
             print(isoTimeStamp)
             add_data(connection, palletId, employeeId, isoTimeStamp)
         close_db_connection(connection)
-        
+
         return JSONResponse(status_code=status.HTTP_200_OK, content={
             "message": "Photos uploaded successfully",
             "employeeId": employeeId,
@@ -66,7 +63,7 @@ async def receive_photo(
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={
             "message": "Failed to upload photos",
             "error": str(e)
-        })        
+        })
     # finally:
     #     connection = get_db_connection()
     #     add_data(connection, palletId, employeeId, timestamp)
