@@ -1,0 +1,21 @@
+variables:
+  WEBUI_VERSION: v1.0.1
+
+build:
+  stage: build
+  image: "${CI_MANTRA_DOCKER_REPOSITORY}/arm32v7/dind:3.9.9"
+  before_script:
+    - mkdir -p $HOME/.docker
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  script:
+    - mkdir -p static
+    - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --output ui.gz.tar $CI_API_V4_URL/projects/1087/packages/generic/pe_ui/$WEBUI_VERSION/pe_ui-$WEBUI_VERSION.gz.tar'
+    - tar -xzf ui.gz.tar
+    - rm -rf ./static
+    - mv dist static
+    - rm -f ui.gz.tar
+    - docker build --label version=$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:latest
+  tags:
+    - docker
+
