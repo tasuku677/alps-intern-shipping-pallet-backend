@@ -48,8 +48,10 @@ def add_data(connection, employeeId, palletID, timestamp):
         VALUES ('{palletID}','{employeeId}',CAST('{timestamp}' AS datetimeoffset))
     """
     logger.info(query)
+    cursor = connection.cursor()
     # cursor.execute(query, (palletID, employeeId, "2024-09-09T11:29:11.65+00:00"))
-    connection.execute(query)
+    cursor.execute(query)
+    cursor.commit()
     
 if __name__ == "__main__":
     connection = get_db_connection()
