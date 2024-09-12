@@ -24,7 +24,8 @@ fastapi dev main.py
 ## Configurable value
 If you want to set some values as what you need, you can run 
 ```
-export APP_DATABASE_PASSWORD=password
+
+
 ``` 
 After that, you launch the server again.
 

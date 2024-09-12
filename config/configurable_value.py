@@ -25,8 +25,8 @@ def get_command_line_args():
         print(args)
         
 
-    # Example usage:
-    # command_line_args = get_command_line_args()
+# Example usage:
+# command_line_args = get_command_line_args()
 
 # DEFAULT_CONFIG=yaml.load(pkg_resources.resource_stream('tasuku_app', 'config.yaml'), Loader=yaml.FullLoader)
 
