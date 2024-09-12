@@ -6,10 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from utils.store_photo import store_photo
 from utils.make_backup import make_backup
-from utils.constant_value import DEFAULT_CONFIG
+from config.configurable_value import get_config
 
 from utils.operate_db import get_db_connection, close_db_connection, add_data
-
+ 
 app = FastAPI()
 
 app.add_middleware(
@@ -40,7 +40,7 @@ async def receive_photo(
 ):
     # print(blobArray)  
     print(isoTimeStampArray[0])
-    match = re.match( r"(\d{4})-(\d{2})-(\d{2})", isoTimeStampArray[0])
+    match = re.match( get_config("FOLDER_SEPARATOR"), isoTimeStampArray[0])
     if match:
         folder_name = match.group(0)
     folder_path = f"./photos/{folder_name}"

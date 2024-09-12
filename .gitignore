@@ -2,6 +2,6 @@ temp/
 json-backup/
 photos/
 config.py
-config.py
 static/
 utilsconstant_value.py
+default_config.yaml

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 import pyodbc
-from utils.constant_value import DEFAULT_CONFIG
+from config.configurable_value import DEFAULT_CONFIG # type: ignore
 
 
 router = APIRouter()
