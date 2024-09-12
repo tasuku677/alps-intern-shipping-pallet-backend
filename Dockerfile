@@ -4,7 +4,7 @@ WORKDIR /app
 RUN apt update && apt install -y --no-install-recommends --no-install-suggests unixodbc && apt clean
 COPY requirements.txt /root/requirements.txt
 COPY utils/ /app/utils
-COPY default_config.yaml /app/default_config.yaml
+COPY config/ /app/config
 COPY main.py /app/main.py
 COPY static/ /app/static
 
