@@ -49,7 +49,7 @@ def add_data(connection, employeeId, palletID, timestamp):
     """
     logger.info(query)
     # cursor.execute(query, (palletID, employeeId, "2024-09-09T11:29:11.65+00:00"))
-    connection.execute_non_query(query)
+    connection.execute(query)
     
 if __name__ == "__main__":
     connection = get_db_connection()
