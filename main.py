@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from utils.store_photo import store_photo
 from utils.make_backup import make_backup
-from config.configurable_value import get_config
+from config.configurable_value import get_config, get_command_line_args, DEFAULT_CONFIG_FRONT
 
 from utils.operate_db import get_db_connection, close_db_connection, add_data
 
@@ -35,6 +35,9 @@ def read_root():
 async def get_js_files(file_path: str):
     return FileResponse(f'./static/assets/{file_path}')
 
+@app.get("/config/configurable_value.py")
+async def get_config_file():
+    return DEFAULT_CONFIG_FRONT
 
 @app.post("/api/v1/photos")
 async def receive_photo(

@@ -3,7 +3,7 @@ from typing import Callable
 import sys
 
 
-DEFAULT_CONFIG = {
+DEFAULT_CONFIG_BACK = {
     'API_URL': '/',
     'DATABASE_SERVER': 'sql04.cz.alps.eu',
     'DATABASE_USERNAME': 'WHappsApplicationUser',
@@ -13,11 +13,20 @@ DEFAULT_CONFIG = {
     'FOLDER_SEPARATOR': r'(\d{4})-(\d{2})-(\d{2})',
     'SERVER_PORT': 8000
 }
+DEFAULT_CONFIG_FRONT = {
+    "API_URL": "http://127.0.0.1",
+    "API_URL_EXEP": "http://192.168.100.43",
+    "API_PORT": 8000,
+    "EMPLOYEE_VALIDATION_MASK": "ALCZ\\d{8}",
+    "MINIMUM_PICTURES": 1,
+    "MAXIMUM_PICTURES": 10,
+    "INTERVAL_TIME": 1000
+}
 
 def get_config(name: str, default=None, wrapper: Callable = None):
     if not wrapper:
         wrapper = lambda x: x   
-    return wrapper(os.getenv(name, DEFAULT_CONFIG.get(name, default)))
+    return wrapper(os.getenv(name, DEFAULT_CONFIG_BACK.get(name, default)))
 
 
 def get_command_line_args():
