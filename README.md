@@ -43,10 +43,24 @@ For more details, please refer to the following document: DataWedge for Android 
 For more detail information see the following document. https://supportcommunity.zebra.com/s/article/DataWedge-for-Android-Send-Enter-or-Tab-after-scanning?language=en_US
 
 
-## How to use
-1. **Scan Barcode for both EmployeeId and PalletId**: The input forms accept manual input as well as barcode scanning in case the barcode is damaged. After they are validated, you will see a camera being activated.
-2. **Take photo of the Pallets**: By pressing the button with the camera icon, you can take a picture. You should take photos of the four sides of the shipping pallet.
-3. **Check Photos**: Make sure you took appropriate photos.
-4. **Submit Photos**: You will see the submit button on the bottom of right side.
-5. **Repeat the same procedure**: Employee Id is fullfilled automatically. You can start with scanning pallet ID.
-- If you get an error of data inconsistency, you need to decide whether you delete the data or still keep it. However, as long as you choose to leave the incorrect data, the application probably stuck.
+# How to Use
+
+1. **Scan Barcode for both Employee ID and Pallet ID**  
+   The input forms accept both manual entry and barcode scanning, in case the barcode is damaged. After validation, the camera will be activated.
+
+2. **Take Photos of the Pallet**  
+   Press the button with the camera icon to take photos. Ensure you capture all four sides of the shipping pallet.
+
+3. **Check Photos**  
+   Verify that the photos are clear and appropriate.
+
+4. **Submit Photos**  
+   You can submit the photos by pressing the submit button located at the bottom-right corner.
+
+5. **Repeat the Process**  
+   The Employee ID will be auto-filled for the next entry. You can proceed by scanning the next Pallet ID.
+
+---
+
+**Note:**  
+If you encounter a data inconsistency error, you will need to decide whether to delete the incorrect data or keep it. However, keeping incorrect data may cause the application to become unresponsive.
