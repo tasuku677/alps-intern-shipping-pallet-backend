@@ -4,11 +4,12 @@
 ## Overview
 This project is designed to manage and track shipping pallet information in a warehouse. It stores photo data in a local folder, along with pallet IDs, employee IDs, and photo names in a JSON file. Additionally, the backend server updates the database with new records corresponding to the stored photos each time photos are submitted from the client side.
 
-<div style="display: flex; flex-direction: row;">
-    <img src="./pictures_for_README/01.png" alt="Image 1" style="width: 33%; margin-right: 10px;">
-    <img src="./pictures_for_README/02.png" alt="Image 2" style="width: 33%; margin-right: 10px;">
-    <img src="./pictures_for_README/03.png" alt="Image 3" style="width: 33%;">
-</div>
+
+
+| ![Image 1](./pictures_for_README/01.png) | ![Image 2](./pictures_for_README/02.png) | ![Image 3](./pictures_for_README/03.png) |
+|------------------------------------------|------------------------------------------|------------------------------------------|
+
+
 
 ## Getting started
 ### Prepare Virtual Environment
