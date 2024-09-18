@@ -41,3 +41,12 @@ For more details, please refer to the following document: DataWedge for Android 
 
 
 For more detail information see the following document. https://supportcommunity.zebra.com/s/article/DataWedge-for-Android-Send-Enter-or-Tab-after-scanning?language=en_US
+
+
+## How to use
+1. **Scan Barcode for both EmployeeId and PalletId**: The input forms accept manual input as well as barcode scanning in case the barcode is damaged. After they are validated, you will see a camera being activated.
+2. **Take photo of the Pallets**: By pressing the button with the camera icon, you can take a picture. You should take photos of the four sides of the shipping pallet.
+3. **Check Photos**: Make sure you took appropriate photos.
+4. **Submit Photos**: You will see the submit button on the bottom of right side.
+5. **Repeat the same procedure**: Employee Id is fullfilled automatically. You can start with scanning pallet ID.
+- If you get an error of data inconsistency, you need to decide whether you delete the data or still keep it. However, as long as you choose to leave the incorrect data, the application probably stuck.
