@@ -3,6 +3,7 @@ import re
 
 import logging
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -76,12 +77,18 @@ async def receive_photo(
             "employeeId": employeeId,
             "palletId": palletId
         })
+    except RequestValidationError as e:
+        return JSONResponse(status_code = status.HTTP_422_UNPROCESSABLE_ENTITY, content={
+            "message": "EmployeeId, PalletId, or both are missing or invalid.",
+            "error": str(e)
+        })
     except HTTPException as e:
         return JSONResponse(status_code=e.status_code, content={
-            "message": e.detail
+            "message": e.detail,
+            "error": str(e)
         })
     except Exception as e:
-        return JSONResponse(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content={
-            "message": "There is network issue",
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={
+            "message": "Failed to operate the database",
             "error": str(e)
         })

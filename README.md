@@ -43,7 +43,7 @@ For more details, please refer to the following document: DataWedge for Android 
 For more detail information see the following document. https://supportcommunity.zebra.com/s/article/DataWedge-for-Android-Send-Enter-or-Tab-after-scanning?language=en_US
 
 
-# How to Use
+## How to Use
 
 1. **Scan Barcode for both Employee ID and Pallet ID**  
    The input forms accept both manual entry and barcode scanning, in case the barcode is damaged. After validation, the camera will be activated.
