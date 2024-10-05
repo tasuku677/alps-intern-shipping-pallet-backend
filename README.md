@@ -27,12 +27,6 @@ fastapi dev main.py
 ```
 
 
-## Configurable value
-If you want to set some values as what you need, you can run 
-```
-
-``` 
-After that, launch the server again.
 
 ## Notes 
 ### Configuring the Barcode Reader
