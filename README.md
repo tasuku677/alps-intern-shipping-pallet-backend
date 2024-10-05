@@ -1,4 +1,4 @@
-# pallet evidence
+# Pallet evidence
 
 
 ## Overview
@@ -12,6 +12,8 @@ This project is designed to manage and track shipping pallet information in a wa
 
 
 ## Getting started
+In order to use this application, you also need frontend. See the following instruction. https://github.com/tasuku677/alps-intern-shipping-pallet
+
 ### Prepare Virtual Environment
 You need to create a virtual environment for this project. 
 For more detail information see the following document. https://fastapi.tiangolo.com/virtual-environments/#activate-the-virtual-environment
