@@ -89,6 +89,6 @@ async def receive_photo(
         })
     except Exception as e:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={
-            "message": "Failed to operate the database",
+            "message": "Failed to operate the database. There is some problems in the database.",
             "error": str(e)
         })
